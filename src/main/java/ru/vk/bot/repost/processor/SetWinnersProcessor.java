@@ -12,6 +12,7 @@ import ru.vk.bot.repost.interfaces.Sender;
 import ru.vk.bot.repost.interfaces.UpdateHandler;
 import ru.vk.bot.repost.repository.CompetitionRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;

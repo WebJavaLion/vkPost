@@ -16,17 +16,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import ru.vk.bot.repost.entities.ChatManager;
 import ru.vk.bot.repost.entities.VkAttachment;
 import ru.vk.bot.repost.entities.VkPost;
 import ru.vk.bot.repost.enums.PhotoSizeEnum;
+import ru.vk.bot.repost.interfaces.Sender;
+import ru.vk.bot.repost.interfaces.UpdateHandler;
+import ru.vk.bot.repost.processor.PublishProcessor;
 import ru.vk.bot.repost.repository.VkPostRepository;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Lev_S
@@ -251,6 +257,7 @@ public class VkApiRequestService {
                                 .filter(p -> p.getVkId().equals(post.getId()))
                                 .findFirst()
                                 .ifPresent(p -> {
+                                    p.setText(post.getText());
                                     p.setAttachments(new ArrayList<>(
                                             Collections.singletonList(attachment))
                                     );
@@ -264,13 +271,16 @@ public class VkApiRequestService {
                         allPostsWithoutAttachments.stream()
                                 .filter(p -> p.getVkId().equals(post.getId()))
                                 .findFirst()
-                                .ifPresent(p -> p.setAttachments(
-                                        collectionOfAttachmentsUrls
-                                                .stream()
-                                                .map(VkAttachment::new)
-                                                .peek(att -> att.setPost(p))
-                                                .collect(Collectors.toList())
-                                ));
+                                .ifPresent(p -> {
+                                        p.setText(post.getText());
+                                        p.setAttachments(
+                                                collectionOfAttachmentsUrls
+                                                        .stream()
+                                                        .map(VkAttachment::new)
+                                                        .peek(att -> att.setPost(p))
+                                                        .collect(Collectors.toList())
+                                          );
+                                });
                     }
                 }
             });
@@ -278,6 +288,7 @@ public class VkApiRequestService {
             postRepository.saveAll(allPostsWithoutAttachments);
         }
     }
+
     public String validateText(String text) {
         Matcher matcher = VALIDATE_PATTERN.matcher(text);
 
@@ -292,4 +303,5 @@ public class VkApiRequestService {
         }
         return text;
     }
+
 }

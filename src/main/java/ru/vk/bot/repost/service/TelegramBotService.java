@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -34,9 +35,11 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     private final Logger LOGGER = LoggerFactory.getLogger(TelegramBotService.class);
 
-    public static boolean isStopped = true;
+    private static final long CHAT_ID = -1001247006240L;// 363052334; -1001243404896L
 
     private final VkPostRepository vkPostRepository;
+
+    public static boolean isStopped = true;
 
     @Autowired
     CompetitionService competitionService;
@@ -46,8 +49,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Value("${tg.bot.name}")
     private String name;
-
-    private static final long CHAT_ID = 363052334; //-1001247006240L; -1001243404896L
 
     @Autowired
     public TelegramBotService(DefaultBotOptions options,
@@ -98,6 +99,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
+    @Transactional
     public void execute(VkPost post) {
         try {
             if (!post.getAttachments().isEmpty()) {
@@ -167,17 +169,22 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
-    public void flushDefinedAmountOfPosts(Integer amount) {
+    public void flushDefinedAmountOfPosts(Integer amount)  {
         List<VkPost> allByIsSentFalse = vkPostRepository.findAllByIsSentFalse();
 
-        allByIsSentFalse.stream()
+        allByIsSentFalse
+                .stream()
                 .sorted(Comparator.comparing(VkPost::getDate).reversed())
                 .limit(amount)
                 .sorted(Comparator.comparing(VkPost::getDate))
-                .peek(p -> p.setPreparedToPost(true))
+                .filter(VkPost::getPreparedToPost)
                 .forEach(this::execute);
 
-        allByIsSentFalse.forEach(post -> post.setIsSent(true));
+        allByIsSentFalse
+                .stream()
+                .filter(VkPost::getPreparedToPost)
+                .forEach(p -> p.setIsSent(true));
+
         vkPostRepository.saveAll(allByIsSentFalse);
     }
 }

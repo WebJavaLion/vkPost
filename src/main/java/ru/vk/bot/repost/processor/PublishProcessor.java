@@ -75,10 +75,11 @@ public class PublishProcessor implements UpdateHandler<Message> {
                         Collections.singletonList(
                                 new InlineKeyboardButton()
                                         .setText(
-                                                "Участвуют: " +
+                                                "(" +
                                                 competition
                                                         .getParticipants()
-                                                        .size()
+                                                        .size() +
+                                                        ") Участвовать!"
                                         )
                                         .setCallbackData(
                                                 Action.ADD_PARTICIPANT.getValue() +

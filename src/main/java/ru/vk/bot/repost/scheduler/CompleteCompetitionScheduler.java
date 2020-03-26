@@ -80,11 +80,11 @@ public class CompleteCompetitionScheduler {
                                 "\n" + "******\n Победители: " +
                                 builder.delete(builder.length() - 2, builder.length());
 
-                        editMessageText.setMessageId(competition.getMessageId());
                         editMessageText.setChatId(competition.getChat().getChatId());
+                        editMessageText.setMessageId(competition.getMessageId());
+                        editMessageText.disableWebPagePreview();
                         editMessageText.setText(editedMessage);
                         editMessageText.setParseMode("html");
-                        editMessageText.disableWebPagePreview();
                         editMessageText.enableHtml(true);
 
                         competition.setFinished(true);

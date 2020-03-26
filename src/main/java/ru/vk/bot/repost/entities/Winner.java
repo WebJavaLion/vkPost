@@ -30,3 +30,4 @@ public class Winner {
     Competition competition;
 
 }
+

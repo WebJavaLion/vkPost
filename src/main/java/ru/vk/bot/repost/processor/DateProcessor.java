@@ -1,6 +1,7 @@
 package ru.vk.bot.repost.processor;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -13,15 +14,16 @@ import ru.vk.bot.repost.repository.CompetitionRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
+
 
 @Component
 @AllArgsConstructor
 public class DateProcessor implements UpdateHandler<Message> {
 
+
     private final CompetitionRepository competitionRepository;
+
 
     @Override
     public Action getStatus() {

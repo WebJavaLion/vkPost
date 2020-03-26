@@ -84,9 +84,10 @@ public class AddParticipantProcessor implements UpdateHandler<CallbackQuery> {
                                                     Collections.singletonList(
                                                             new InlineKeyboardButton()
                                                                     .setText(
-                                                                            "Участвуют: " +
-                                                                                    (competition.getParticipants().size()
-                                                                                            ))
+                                                                            "(" +
+                                                                                    competition
+                                                                                            .getParticipants().size() +
+                                                                                    ") Участвовать!")
                                                                     .setCallbackData(Action.ADD_PARTICIPANT.getValue() +
                                                                             " " +
                                                                             competition.getId())

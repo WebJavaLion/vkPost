@@ -8,6 +8,7 @@ import ru.vk.bot.repost.enums.Action;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public final class KeyboardUtil {
 

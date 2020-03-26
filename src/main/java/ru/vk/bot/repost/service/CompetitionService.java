@@ -24,19 +24,19 @@ import java.util.Set;
 @Component
 public class CompetitionService {
 
+    private final TelegramBotService botService;
     private final ChatManagerRepository repository;
     private final Map<Action, UpdateHandler<Message>> messageHandlerMap;
     private final Map<Action, UpdateHandler<CallbackQuery>> callbackHandlerMap;
-    private final TelegramBotService botService;
 
     @Autowired
-    public CompetitionService(ChatManagerRepository chatManagerRepository,
+    public CompetitionService(TelegramBotService botService,
+                              ChatManagerRepository chatManagerRepository,
                               Set<UpdateHandler<Message>> messageHandlers,
-                              TelegramBotService botService,
                               Set<UpdateHandler<CallbackQuery>> callbackHandlers) {
 
-        this.repository = chatManagerRepository;
         this.botService = botService;
+        this.repository = chatManagerRepository;
 
         messageHandlerMap = new HashMap<>();
         for (UpdateHandler<Message> messageHandler : messageHandlers) {
@@ -125,7 +125,6 @@ public class CompetitionService {
 
             if (Action.ADD_PARTICIPANT.equals(key)) {
                 callbackQueryUpdateHandler.handleUpdate(callbackQuery, sender, null);
-                return;
 
             } else {
                 Optional<ChatManager> chatManagerOptional =
