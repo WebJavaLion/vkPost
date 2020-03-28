@@ -21,9 +21,6 @@ import java.io.Serializable;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class VkAttachment implements Serializable {
 
-    public VkAttachment(String url) {
-        this.url = url;
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -33,4 +30,8 @@ public class VkAttachment implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
     VkPost post;
+
+    public VkAttachment(String url) {
+        this.url = url;
+    }
 }

@@ -16,23 +16,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import ru.vk.bot.repost.entities.ChatManager;
 import ru.vk.bot.repost.entities.VkAttachment;
 import ru.vk.bot.repost.entities.VkPost;
 import ru.vk.bot.repost.enums.PhotoSizeEnum;
-import ru.vk.bot.repost.interfaces.Sender;
-import ru.vk.bot.repost.interfaces.UpdateHandler;
-import ru.vk.bot.repost.processor.PublishProcessor;
 import ru.vk.bot.repost.repository.VkPostRepository;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Lev_S
@@ -95,7 +89,7 @@ public class VkApiRequestService {
                                             PATTERN.matcher(post.getText()).matches()
                                                     || (!post.getText().contains("http://") && !post.getText().contains("https://"))
                                                     && Arrays
-                                                    .stream(post.getText().split("."))
+                                                    .stream(post.getText().split("\\."))
                                                     .allMatch(
                                                             str -> !str.startsWith("ru")
                                                                     && !str.startsWith("com")

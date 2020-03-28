@@ -1,11 +1,9 @@
 package ru.vk.bot.repost.service;
 
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -13,7 +11,6 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
@@ -41,9 +38,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     public static boolean isStopped = true;
 
-    @Autowired
-    CompetitionService competitionService;
-
     @Value("${tg.bot.token}")
     private String token;
 
@@ -57,22 +51,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
         this.vkPostRepository = vkPostRepository;
     }
 
-    private Message send(SendMessage sendMessage) {
-        try {
-            return execute(sendMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @SneakyThrows
     @Override
-    public void onUpdateReceived(Update update) {
-        if (update != null) {
-            competitionService.execute(update, this::send);
-        }
-    }
+    public void onUpdateReceived(Update update) {}
 
     @Override
     public String getBotUsername() {
