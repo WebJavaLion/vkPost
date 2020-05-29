@@ -74,7 +74,7 @@ public class CompetitionService {
                             messageUpdateHandler = messageHandlerMap.get(action);
                             messageUpdateHandler.handleUpdate(message, sender, manager);
                         } else {
-                            messageHandlerMap.get(Action.START)
+                            messageHandlerMap.get(Action.DEFAULT)
                                     .handleUpdate(message, sender, null);
                         }
                     } else {
@@ -86,7 +86,7 @@ public class CompetitionService {
                             } else {
                                 messageUpdateHandler = messageHandlerMap.get(Action.DEFAULT);
                             }
-                        } else if(Action.CANCEL.getValue().equals(message.getText())) {
+                        } else if (Action.CANCEL.getValue().equals(message.getText())) {
                             messageUpdateHandler = messageHandlerMap.get(Action.CANCEL);
 
                         } else {
