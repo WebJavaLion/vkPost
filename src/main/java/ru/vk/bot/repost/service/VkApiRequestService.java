@@ -64,7 +64,6 @@ public class VkApiRequestService {
     private static final Integer countOfVkPosts = 5;
 
     public void createPost() {
-
         List<VkPost> postsForBd = new ArrayList<>();
 
         try {
