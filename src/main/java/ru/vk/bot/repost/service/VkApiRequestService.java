@@ -46,7 +46,6 @@ public class VkApiRequestService {
 
     Logger LOGGER = LoggerFactory.getLogger(VkApiRequestService.class);
 
-
     private final ServiceActor actor;
 
     private final VkApiClient client;
