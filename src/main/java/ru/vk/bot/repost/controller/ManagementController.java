@@ -53,8 +53,8 @@ public class ManagementController {
     }
 
     @GetMapping("/change")
-    public void change() {
-        
+    public String change() {
+        return "Не завелся Левин ключ, ведь он пидор";
     }
 }
 
