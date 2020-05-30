@@ -93,9 +93,10 @@ public class VkApiRequestService {
                             post ->
                                     (
                                             PATTERN.matcher(post.getText()).matches()
-                                                    || (!post.getText().contains("http://") && !post.getText().contains("https://"))
+                                                    || (!post.getText().contains("http://") && !post.getText()
+                                                    .contains("https://"))
                                                     && Arrays
-                                                    .stream(post.getText().split("."))
+                                                    .stream(post.getText().split("\\."))
                                                     .allMatch(
                                                             str -> !str.startsWith("ru")
                                                                     && !str.startsWith("com")
@@ -146,7 +147,8 @@ public class VkApiRequestService {
                                     photo.getSizes().stream()
                                             .filter(photoSize -> size.getValue().equals(photoSize.getType().getValue()))
                                             .findAny()
-                                            .ifPresent(photoSize -> attachmentForBd.setUrl(photoSize.getUrl().getPath()));
+                                            .ifPresent(photoSize -> attachmentForBd
+                                                    .setUrl(photoSize.getUrl().getPath()));
                                 }
                             } else if ("doc".equals(attachmentType)) {
                                 attachmentForBd.setUrl(
@@ -272,14 +274,14 @@ public class VkApiRequestService {
                                 .filter(p -> p.getVkId().equals(post.getId()))
                                 .findFirst()
                                 .ifPresent(p -> {
-                                        p.setText(post.getText());
-                                        p.setAttachments(
-                                                collectionOfAttachmentsUrls
-                                                        .stream()
-                                                        .map(VkAttachment::new)
-                                                        .peek(att -> att.setPost(p))
-                                                        .collect(Collectors.toList())
-                                          );
+                                    p.setText(post.getText());
+                                    p.setAttachments(
+                                            collectionOfAttachmentsUrls
+                                                    .stream()
+                                                    .map(VkAttachment::new)
+                                                    .peek(att -> att.setPost(p))
+                                                    .collect(Collectors.toList())
+                                    );
                                 });
                     }
                 }
